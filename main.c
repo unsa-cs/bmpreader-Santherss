@@ -16,48 +16,50 @@ void display() {
 }
 
 int main(int argc, char *argv[]) {
-    char filename[256];
-
-    // Pedir al usuario el nombre del archivo BMP
-    printf("Ingrese el nombre del archivo BMP (con extensión): ");
-    scanf("%255s", filename);
-    int grayscale = 0;
     
-    for(int i = 1; i < argc; i++){
-     if(strcmp(argv[i], "gris")==0 || strcmp(argv[i],"grayscale") == 0){
+    if(argc < 2){
+    fprintf(stderr, "Uso: %s <Lenna.bmp>\n",argv[0]);
+    return 1;
+  }
+char *filename = argv[1];//nombre de archivo desde argumento
+int grayscale = 0;
+    
+for(int i = 1; i < argc; i++){
+    if(strcmp(argv[i], "gris")==0 || strcmp(argv[i],"grayscale") == 0){
       grayscale = 1; //activar modo blanco y negro
     }
-  }
+}
 image = readBMP(filename);
-  if (!image) return 1;
+if (!image) return 1;
 
-  if(grayscale){
+if(grayscale){
     grayImage = convertToGray(image);// Convertir la imagen a escala de grises
 
     freeBMP(image);
     image = grayImage;
-     
-  }else{
+}else{
     grayImage = image; //uso de imagen original
-  }
+}
     
 
     // Inicializar GLUT
     //int argc = 1; // Necesario para evitar problemas con glutInit
     //char *argv[1] = { "" }; // Argumento vacío para GLUT
-    glutInit(&argc, argv);
+glutInit(&argc, argv);
 
-    // Establecer el modo de visualización
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowSize(grayImage->width, grayImage->height); // Usar el tamaño de la imagen en escala de grises
-    glutCreateWindow("Visualizador de BMP en Escala de Grises");
+// Establecer el modo de visualización
+glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+glutInitWindowSize(grayImage->width, grayImage->height); // Usar el tamaño de la imagen en escala de grises
+glutCreateWindow("Visualizador de BMP en Escala de Grises");
 
-    glLoadIdentity();
-    glOrtho(0, grayImage->width, grayImage->height, 0, -1, 1);
+glLoadIdentity();
+glOrtho(0, grayImage->width, grayImage->height, 0, -1, 1);
 
-    glutDisplayFunc(display);
-    glutMainLoop();
+glutDisplayFunc(display);
+glutMainLoop();
 
-    freeBMP(grayImage); 
-    return 0;
+freeBMP(grayImage); 
+return 0;
+
+
 }

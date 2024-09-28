@@ -27,6 +27,33 @@ void freeBMP(BMPImage *image) {
   free(image);
 }
 
+BMPImage* converToGray(BMPImage *original){
+  BMPImage *grayImage = malloc(sizeof(BMPImage));
+  grayImage->width = original->width;
+  grayImage->height = original->height;
+  grayImage->data = malloc(grayImage->width * grayImage->height);
+   
+  //para obtener los valores de color considerando el formato RGB
+  for(int i = 0; i < original->height; i++){
+    for (int j = 0; j < original->width; j++){
+
+      unsigned char b = original->data[(i * original->width + j)* 3 + 0];
+      unsigned char g = original->data[(i * original->width + j)* 3 + 1];
+      unsigned char r = original->data[(i * original->width + j)* 3 + 2];
+
+
+
+      //conversion a Gris 
+      unsigned char gray = (unsigned char)(r * 0.3 + g * 0.59 + b * 0.11);
+      grayImage->data[i * grayImage->width + j] = gray;
+
+    }
+
+  }
+  return grayImage;
+}
+
+
 void drawBMP(BMPImage *image) {
-  glDrawPixels(image->width, image->height, GL_BGR, GL_UNSIGNED_BYTE, image->data);
+  glDrawPixels(image->width, image->height, GL_LUMINANCE, GL_UNSIGNED_BYTE, image->data);
 }

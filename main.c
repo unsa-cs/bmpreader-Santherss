@@ -2,6 +2,7 @@
 #include <GL/glut.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 BMPImage *image; 
 BMPImage *grayImage;
@@ -14,24 +15,36 @@ void display() {
     glFlush();
 }
 
-int main() {
+int main(int argc, char *argv[]) {
     char filename[256];
 
     // Pedir al usuario el nombre del archivo BMP
     printf("Ingrese el nombre del archivo BMP (con extensión): ");
     scanf("%255s", filename);
-
-    image = readBMP(filename);
-    if (!image) return 1;
-
-    // Convertir la imagen a escala de grises
-    grayImage = convertToGray(image);
+    int grayscale = 0;
     
+    for(int i = 1; i < argc; i++){
+     if(strcmp(argv[i], "gris")==0 || strcmp(argv[i],"grayscale") == 0){
+      grayscale = 1; //activar modo blanco y negro
+    }
+  }
+image = readBMP(filename);
+  if (!image) return 1;
+
+  if(grayscale){
+    grayImage = convertToGray(image);// Convertir la imagen a escala de grises
+
     freeBMP(image);
+    image = grayImage;
+     
+  }else{
+    grayImage = image; //uso de imagen original
+  }
+    
 
     // Inicializar GLUT
-    int argc = 1; // Necesario para evitar problemas con glutInit
-    char *argv[1] = { "" }; // Argumento vacío para GLUT
+    //int argc = 1; // Necesario para evitar problemas con glutInit
+    //char *argv[1] = { "" }; // Argumento vacío para GLUT
     glutInit(&argc, argv);
 
     // Establecer el modo de visualización

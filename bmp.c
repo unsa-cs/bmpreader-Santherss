@@ -1,6 +1,8 @@
 #include "bmp.h"
 #include <GL/glut.h>
 
+extern BMPImage *grayImage; 
+
 BMPImage* readBMP(const char *filename) {
   BMPImage *image = malloc(sizeof(BMPImage));
   FILE *file = fopen(filename, "rb");
@@ -31,7 +33,7 @@ BMPImage* convertToGray(BMPImage *original){
   BMPImage *grayImage = malloc(sizeof(BMPImage));
   grayImage->width = original->width;
   grayImage->height = original->height;
-  grayImage->data = malloc(grayImage->width * grayImage->height);
+  grayImage->data = malloc(grayImage->width * grayImage->height * sizeof(unsigned char));
    
   //para obtener los valores de color considerando el formato RGB
   for(int i = 0; i < original->height; i++){
@@ -55,5 +57,15 @@ BMPImage* convertToGray(BMPImage *original){
 
 
 void drawBMP(BMPImage *image) {
-  glDrawPixels(image->width, image->height, GL_LUMINANCE, GL_UNSIGNED_BYTE, image->data);
+  if(image != NULL && image->data != NULL){
+    if(image->height > 0 && image->width > 0){
+      if (image == grayImage) {//si la imagen esta en gris
+          glDrawPixels(image->width, image->height, GL_LUMINANCE, GL_UNSIGNED_BYTE, image->data);
+
+      }else{//si la imagen es a color
+        glDrawPixels(image->width,image->height,GL_RGB,GL_UNSIGNED_BYTE,image->data);
+      
+      }
+    }
+  }
 }

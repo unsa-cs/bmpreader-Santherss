@@ -12,7 +12,7 @@ typedef struct {
 } BMPImage;
 
 BMPImage* readBMP(const char *filename);
-BMPImage* converToGray(BMPImage *original);
+BMPImage* convertToGray(BMPImage *original);
 void freeBMP(BMPImage *image);
 void drawBMP(BMPImage *image);
 

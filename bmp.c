@@ -27,7 +27,7 @@ void freeBMP(BMPImage *image) {
   free(image);
 }
 
-BMPImage* converToGray(BMPImage *original){
+BMPImage* convertToGray(BMPImage *original){
   BMPImage *grayImage = malloc(sizeof(BMPImage));
   grayImage->width = original->width;
   grayImage->height = original->height;
